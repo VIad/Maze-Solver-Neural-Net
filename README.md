@@ -67,7 +67,7 @@ In a very brief, TL;DR format, this is how the generation works:
     X_train = array_of_size(n_mazes, 7, 7)
     Y_train = array_of_size(n_mazes, 7, 7)
     for i in range 0 to n_mazes:
-	    maze = = generate_random_maze()
+	    maze = generate_random_maze()
 	    X_train[i] = maze
 	    Y_train[i] = a_star_solve(maze)
 
@@ -83,4 +83,54 @@ where
 
 ## Models, Training & Lessons Learned
 
-![enter image description here](https://i.imgur.com/Jb3ZSNo.png)
+![enter image description here](https://i.imgur.com/GoPThto.png)
+
+### Training
+Given that this is a [Regression Model](https://www.imsl.com/blog/what-is-regression-model), all variants of it have been trained to minimize the [Mean Squared Error](https://en.wikipedia.org/wiki/Mean_squared_error) of the set. The `batch_size=64` is set to higher than default to maintain a good Training time / Generalization ratio.
+
+To train the model, i have found that using the [AMSGRAD](https://arxiv.org/pdf/1904.09237.pdf) optimizer seems to bring the model closer to convergence than both SGD and ADAM.
+
+The following plots the loss against the epochs for a pretrained 500 epoch model (*'More layers V3' from the table below*) :
+
+![enter image description here](https://i.imgur.com/kAYbHjT.png)
+
+
+### What was tried ?
+
+Here's a table sumarizing the models which were attempted.
+
+| # of Parameters | Architecture | Accuracy |
+|-----------------|--------------|----------|
+| 9,209           | Small / Relu | 38.42%   |
+| 11,659          | +2L / Relu   | 40.67%   |
+| 11,843          | Sigmoid Pre out / Relu | 56.11% |
+| 11,843          | Trained Thick & Sparse Mazes / Relu | 54.30% |
+| 27,089          | Sigmoid Out + Dropout regularization| 66.95%   |
+| 30,559          | More layers / Linear | 85.47% |
+| 61,644          | More layers V2 / Linear| 88.26%  |
+| 59,094          | More layers V3 / Linear | 90.31%  |
+| 1,519,074       | Large NN (30ep) / Linear| 97.55%  |
+| 1,519,074       | Large NN V2 + L2 (300ep) / Linear| 97.93% |
+
+
+![enter image description here](https://i.imgur.com/iIb411V.png)
+
+Getting to about 86% accuracy was a relatively simple task, a variety of things was tested:
+
+ - Varying dropout
+ - Different data generation (train data broken down into ~equal thick and sparse mazes)
+ - Trying different optimizers / different output layer functions.
+
+The real uphill battle was getting to the high 90%. As listed above, the models which constistently get into the high 90% have a ridiculous amount of parameters and take stupid long time to train. Colaboratory was heavily utilized for the last 2.
+
+The Large NN models were additionally iteratively tested with different L2 regularization values, dropout rates at varying layers and different amount of epochs (as per the graph Large NN **V1** is trained for 30 epochs, whereas the regularized **V2** is trained for 300). Some of the code for iteratively testing the different models is available in `model/collaboratory/batch_attempt_multiple_models.py`
+Ultimately it was a lot of computation for only reliably obtaining less than half a percentage point over the 30 epoch trained Large NN **V1**
+
+
+### Accuracy
+In our regression task accuracy is evaluated by getting a prediction of a maze solution and then tracing it through the actual maze to see if we reach the ending without guessing *(limited to 17 moves)* and without hitting an obstacle. 
+
+## The Models, Visually Compared
+![enter image description here](https://i.imgur.com/vg23aRL.png)
+![enter image description here](https://i.imgur.com/QIViayX.png)
+![enter image description here](https://i.imgur.com/joKYhKj.png)
