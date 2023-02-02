@@ -83,7 +83,7 @@ where
  - X.dat_smol, Y.dat_smol - Cross validation set *( ~ 3000 mazes)*
  - X.dat_test, Y_dat_test - self evident *(~ 32000 mazes)*
 
-## Models, Training & Lessons Learned
+## Models & Training
 
 ![enter image description here](https://i.imgur.com/GoPThto.png)
 
