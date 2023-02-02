@@ -52,6 +52,8 @@ They each have a maze solution which looks like this
 |M1 Solution  | M2 Solution |
 |--|--|
 | ![enter image description here](https://i.imgur.com/SI4M8zz.png) | ![enter image description here](https://i.imgur.com/NqqmPz7.png) |
+
+
 Though similar, **M1**'s solution takes up 10 spaces (*it's path could be described by using 10 position vectors of 2 elements each*), whereas **M2**'s solution takes up 8. Our FC net's output layer must have a fixed amount of neurons, but one that can accomodate all possible 7x7 mazes and their respective solutions. 
 Therefore, we pick*7x7=49* output layer neurons, the **same size as the input layer**.
 
