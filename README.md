@@ -21,7 +21,7 @@ Build a fully connected [(FC) Deep Network](https://www.oreilly.com/library/view
 We're going to be using a FC Network, even though a [CNN](https://en.wikipedia.org/wiki/Convolutional_neural_network) might be better for this assignment. In this case, this is an arbitrary restriction and primarily taken because i understand CNNs even less.
 
 ### Designing the network
-The inputs are 7x7 images, where each value corresponds to a class, which is either
+The inputs are 7x7 images (read as arrays), where each value corresponds to a class, which is either
 
  - Empty passable space
  - Gate (start or end)
